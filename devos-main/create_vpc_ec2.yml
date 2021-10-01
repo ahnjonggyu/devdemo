@@ -6,7 +6,7 @@
   tasks:
     - name: Create VPC
       ec2_vpc_net:
-        name: Test VPC
+        name: Test VPC-JG
         cidr_block: 10.1.0.0/16
         region: ap-northeast-1
         state: present
@@ -18,7 +18,7 @@
         region: ap-northeast-1
         state: present
         tags:
-          Name: tokyo_igw
+          Name: tokyo_JG_igw
 
     - name: Create Public Subnet
       ec2_vpc_subnet:
@@ -39,13 +39,13 @@
         
     - name: Create Security Group
       ec2_group:
-        name: default sg
+        name: Test-JG-SG
         vpc_id: "{{ vpc_result.vpc.id }}"
         region: ap-northeast-1
         state: present
         description: allow 22, 80
         tags:
-          Name: default sg
+          Name: Test-JG-SG
         rules:
         - proto: tcp
           ports:
@@ -58,7 +58,7 @@
 
     - name: Create Tokyo EC2 key
       ec2_key:
-        name: testkey
+        name: testJGkey
         region: ap-northeast-1
       register: key_result
 
@@ -68,13 +68,13 @@
 
     - name: Create EC2
       ec2:
-        key_name: testkey
+        key_name: testJGkey
         instance_tags:
-          Name: test EC2
+          Name: test-JG-EC2
         region: ap-northeast-1
         instance_type: t2.micro
         image: ami-0ce107ae7af2e92b5
-        group: default sg
+        group: Test-JG-SG
         wait: yes
         count: 1
         vpc_subnet_id: "{{ subnet_result.subnet.id }}"
