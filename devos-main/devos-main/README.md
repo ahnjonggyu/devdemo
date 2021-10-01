@@ -1,2 +1,0 @@
-# devos
-Test for DevOS
